@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePracownik - Rejestr pracowników</title>
+    <meta name="description" content="ePracownik — system rejestracji pracowników firmy XYZ">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2>ePracownik</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 30px; margin-top: 0;">
+                System rejestracji pracowników firmy XYZ
+            </p>
+            <a href="pages/login.html" class="btn btn-primary btn-block" style="margin-bottom: 12px;">Zaloguj się</a>
+            <a href="pages/register.html" class="btn btn-success btn-block">Zarejestruj się</a>
+        </div>
+    </div>
+    <script src="js/api.js"></script>
+    <script>
+        if (isLoggedIn()) {
+            const user = getUser();
+            if (user) {
+                switch (user.rola) {
+                    case 'administrator': window.location.href = 'pages/admin.html'; break;
+                    case 'przelozony': window.location.href = 'pages/przelozony.html'; break;
+                    case 'pracownik': window.location.href = 'pages/pracownik.html'; break;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

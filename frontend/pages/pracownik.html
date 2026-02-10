@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel pracownika - ePracownik</title>
+    <meta name="description" content="Panel pracownika systemu ePracownik">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="header">
+        <h1>ePracownik — Pracownik</h1>
+        <div class="header-nav">
+            <span id="user-info"></span>
+            <button onclick="wyloguj()">Wyloguj</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="komunikaty"></div>
+
+        <!-- PODSUMOWANIE -->
+        <div class="dashboard-cards">
+            <div class="card">
+                <h3>Godziny w tym miesiącu</h3>
+                <div class="value" id="godziny-miesiac">—</div>
+            </div>
+            <div class="card">
+                <h3>Dni pracy w tym miesiącu</h3>
+                <div class="value" id="dni-miesiac">—</div>
+            </div>
+        </div>
+
+        <!-- OSTATNIE WPISY -->
+        <div class="section">
+            <h2>Ostatnie wpisy</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Godziny</th>
+                            <th>Dodane przez</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-ostatnie"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- HISTORIA -->
+        <div class="section">
+            <h2>Historia godzin</h2>
+            <div class="filters">
+                <div class="form-group">
+                    <label>Rok</label>
+                    <input type="number" id="hist-rok" min="2020" max="2030">
+                </div>
+                <div class="form-group">
+                    <label>Miesiąc</label>
+                    <select id="hist-miesiac">
+                        <option value="1">Styczeń</option>
+                        <option value="2">Luty</option>
+                        <option value="3">Marzec</option>
+                        <option value="4">Kwiecień</option>
+                        <option value="5">Maj</option>
+                        <option value="6">Czerwiec</option>
+                        <option value="7">Lipiec</option>
+                        <option value="8">Sierpień</option>
+                        <option value="9">Wrzesień</option>
+                        <option value="10">Październik</option>
+                        <option value="11">Listopad</option>
+                        <option value="12">Grudzień</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="ladujHistoriePracownik()">Filtruj</button>
+            </div>
+            <p id="suma-godzin" style="color: #2c3e50; font-weight: 600; margin-bottom: 12px;"></p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Godziny</th>
+                            <th>Dodane przez</th>
+                            <th>Komentarze</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-historii"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+        if (!sprawdzUprawnienia('pracownik')) { /* przekieruje */ }
+        else {
+            ustawHeader(getUser());
+            ladujPodsumowanie();
+
+            const d = new Date();
+            document.getElementById('hist-rok').value = d.getFullYear();
+            document.getElementById('hist-miesiac').value = d.getMonth() + 1;
+            ladujHistoriePracownik();
+        }
+    </script>
+</body>
+
+</html>

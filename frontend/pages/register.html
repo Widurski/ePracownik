@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rejestracja - ePracownik</title>
+    <meta name="description" content="Rejestracja w systemie ePracownik">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2>Rejestracja</h2>
+            <div id="komunikaty"></div>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="imie">Imię</label>
+                    <input type="text" id="imie" placeholder="Jan" required>
+                </div>
+                <div class="form-group">
+                    <label for="nazwisko">Nazwisko</label>
+                    <input type="text" id="nazwisko" placeholder="Kowalski" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="jan.kowalski@email.pl" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefon">Telefon (9 cyfr)</label>
+                    <input type="text" id="telefon" maxlength="9" placeholder="123456789" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Hasło (min. 8 znaków)</label>
+                    <input type="password" id="password" minlength="8" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-success btn-block">Zarejestruj</button>
+            </form>
+            <p>Masz już konto? <a href="login.html">Zaloguj się</a></p>
+        </div>
+    </div>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+</body>
+
+</html>

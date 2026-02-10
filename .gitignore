@@ -1,0 +1,13 @@
+tools/php/
+backend/vendor/
+backend/node_modules/
+backend/public/storage
+backend/storage/*.key
+backend/.env
+backend/.phpunit.result.cache
+frontend/node_modules/
+.vscode/
+.idea/
+*.log
+Thumbs.db
+.DS_Store
