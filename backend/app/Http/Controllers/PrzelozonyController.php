@@ -51,7 +51,7 @@ class PrzelozonyController extends Controller
     public function getZespol(): JsonResponse
     {
         $pracownicy = User::whereHas('role', function ($q) {
-            $q->where('nazwa', 'pracownik');
+            $q->where('name', 'pracownik');
         })->with('role')->get();
 
         return response()->json($pracownicy);
@@ -80,7 +80,7 @@ class PrzelozonyController extends Controller
         $suma = $godziny->sum('liczba_godzin');
 
         return response()->json([
-            'pracownik' => $pracownik->imie.' '.$pracownik->nazwisko,
+            'pracownik' => $pracownik->first_name . ' ' . $pracownik->last_name,
             'godziny' => $godziny,
             'suma' => $suma,
         ]);
@@ -119,7 +119,7 @@ class PrzelozonyController extends Controller
         $miesiac = $request->get('miesiac', date('m'));
 
         $pracownicy = User::whereHas('role', function ($q) {
-            $q->where('nazwa', 'pracownik');
+            $q->where('name', 'pracownik');
         })
             ->withCount(['godzinyPracy' => function ($q) use ($rok, $miesiac) {
                 $q->whereYear('data_pracy', $rok)->whereMonth('data_pracy', $miesiac);
@@ -133,8 +133,8 @@ class PrzelozonyController extends Controller
 
                 return [
                     'id' => $p->id,
-                    'imie' => $p->imie,
-                    'nazwisko' => $p->nazwisko,
+                    'first_name' => $p->first_name,
+                    'last_name' => $p->last_name,
                     'dni_pracy' => $p->godziny_pracy_count,
                     'suma_godzin' => $suma,
                 ];

@@ -6,19 +6,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class DodajGodzinyRequest extends FormRequest
 {
-    /**
-     * Czy uzytkownik moze wykonac to zadanie
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Reguly walidacji
-     *
-     * @return array<string, string>
-     */
     public function rules(): array
     {
         return [
@@ -28,11 +20,6 @@ class DodajGodzinyRequest extends FormRequest
         ];
     }
 
-    /**
-     * Komunikaty bledow walidacji
-     *
-     * @return array<string, string>
-     */
     public function messages(): array
     {
         return [

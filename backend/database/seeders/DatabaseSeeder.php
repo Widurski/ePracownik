@@ -6,9 +6,6 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Uruchomienie seederow bazy danych
-     */
     public function run(): void
     {
         $this->call([

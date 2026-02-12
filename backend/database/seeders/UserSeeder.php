@@ -12,44 +12,48 @@ class UserSeeder extends Seeder
     {
         User::create([
             'name' => 'Administrator',
-            'imie' => 'Admin',
-            'nazwisko' => 'Systemowy',
+            'login' => 'admin.systemowy',
+            'first_name' => 'Admin',
+            'last_name' => 'Systemowy',
             'email' => 'admin@epracownik.pl',
-            'telefon' => '500100200',
-            'password' => Hash::make('admin123'),
+            'phone_number' => '500100200',
+            'password' => Hash::make('student123'),
             'role_id' => 3,
             'is_active' => true,
         ]);
 
         User::create([
             'name' => 'Jan Kowalski',
-            'imie' => 'Jan',
-            'nazwisko' => 'Kowalski',
+            'login' => 'jan.kowalski',
+            'first_name' => 'Jan',
+            'last_name' => 'Kowalski',
             'email' => 'jan.kowalski@epracownik.pl',
-            'telefon' => '501202303',
-            'password' => Hash::make('pracownik123'),
+            'phone_number' => '501202303',
+            'password' => Hash::make('student123'),
             'role_id' => 2,
             'is_active' => true,
         ]);
 
         User::create([
             'name' => 'Anna Nowak',
-            'imie' => 'Anna',
-            'nazwisko' => 'Nowak',
+            'login' => 'anna.nowak',
+            'first_name' => 'Anna',
+            'last_name' => 'Nowak',
             'email' => 'anna.nowak@epracownik.pl',
-            'telefon' => '502303404',
-            'password' => Hash::make('pracownik123'),
+            'phone_number' => '502303404',
+            'password' => Hash::make('student123'),
             'role_id' => 1,
             'is_active' => true,
         ]);
 
         User::create([
             'name' => 'Piotr Wiśniewski',
-            'imie' => 'Piotr',
-            'nazwisko' => 'Wiśniewski',
+            'login' => 'piotr.wisniewski',
+            'first_name' => 'Piotr',
+            'last_name' => 'Wiśniewski',
             'email' => 'piotr.wisniewski@epracownik.pl',
-            'telefon' => '503404505',
-            'password' => Hash::make('pracownik123'),
+            'phone_number' => '503404505',
+            'password' => Hash::make('student123'),
             'role_id' => 1,
             'is_active' => true,
         ]);

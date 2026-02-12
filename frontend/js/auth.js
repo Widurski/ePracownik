@@ -9,21 +9,21 @@ document.addEventListener('DOMContentLoaded', function () {
         loginForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
-            const email = document.getElementById('email').value.trim();
+            const login = document.getElementById('login').value.trim();
             const password = document.getElementById('password').value;
 
-            if (!email || !password) {
+            if (!login || !password) {
                 pokazKomunikat('Wypełnij wszystkie pola', 'error');
                 return;
             }
 
             try {
-                const result = await apiCall('/login', 'POST', { email, password });
+                const result = await apiCall('/login', 'POST', { login, password });
 
                 localStorage.setItem('token', result.token);
                 localStorage.setItem('user', JSON.stringify(result.user));
 
-                switch (result.user.rola) {
+                switch (result.user.role) {
                     case 'administrator':
                         window.location.href = 'admin.html';
                         break;
@@ -37,8 +37,10 @@ document.addEventListener('DOMContentLoaded', function () {
             } catch (err) {
                 if (err.data && err.data.error) {
                     pokazKomunikat(err.data.error, 'error');
+                } else if (err instanceof TypeError) {
+                    pokazKomunikat('Błąd połączenia z serwerem. Upewnij się, że backend działa na ' + API_URL, 'error');
                 } else {
-                    pokazKomunikat('Błąd logowania', 'error');
+                    pokazKomunikat('Błąd logowania: ' + (err.message || err), 'error');
                 }
             }
         });
@@ -49,26 +51,20 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
 
             const dane = {
-                imie: document.getElementById('imie').value.trim(),
-                nazwisko: document.getElementById('nazwisko').value.trim(),
+                first_name: document.getElementById('imie').value.trim(),
+                last_name: document.getElementById('nazwisko').value.trim(),
                 email: document.getElementById('email').value.trim(),
-                telefon: document.getElementById('telefon').value.trim(),
+                phone_number: document.getElementById('telefon').value.trim(),
                 password: document.getElementById('password').value,
             };
 
-            if (!dane.imie || !dane.nazwisko || !dane.email || !dane.telefon || !dane.password) {
-                pokazKomunikat('Wypełnij wszystkie pola', 'error');
-                return;
-            }
-
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (!emailRegex.test(dane.email)) {
-                pokazKomunikat('Nieprawidłowy format email', 'error');
+            if (!dane.first_name || !dane.last_name || !dane.phone_number || !dane.password) {
+                pokazKomunikat('Wypełnij wszystkie wymagane pola', 'error');
                 return;
             }
 
             const telRegex = /^[0-9]{9}$/;
-            if (!telRegex.test(dane.telefon)) {
+            if (!telRegex.test(dane.phone_number)) {
                 pokazKomunikat('Numer telefonu musi składać się z 9 cyfr', 'error');
                 return;
             }
@@ -78,9 +74,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
+            if (dane.email) {
+                const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if (!emailRegex.test(dane.email)) {
+                    pokazKomunikat('Nieprawidłowy format email', 'error');
+                    return;
+                }
+            }
+
             try {
                 const result = await apiCall('/register', 'POST', dane);
-                pokazKomunikat(result.message, 'success');
+                let msg = result.message;
+                if (result.login) {
+                    msg += ' Twój login: ' + result.login;
+                }
+                pokazKomunikat(msg, 'success');
                 registerForm.reset();
             } catch (err) {
                 if (err.data && err.data.errors) {

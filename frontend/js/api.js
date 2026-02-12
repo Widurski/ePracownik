@@ -32,7 +32,7 @@ async function apiCall(endpoint, method, data) {
 
     const response = await fetch(API_URL + endpoint, options);
 
-    if (response.status === 401) {
+    if (response.status === 401 && endpoint !== '/login') {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         if (window.location.pathname.indexOf('/pages/') !== -1) {
@@ -97,7 +97,7 @@ function sprawdzUprawnienia(wymaganaRola) {
         window.location.href = 'login.html';
         return false;
     }
-    if (user.rola !== wymaganaRola) {
+    if (user.role !== wymaganaRola) {
         window.location.href = '../index.html';
         return false;
     }
@@ -107,6 +107,49 @@ function sprawdzUprawnienia(wymaganaRola) {
 function ustawHeader(user) {
     const info = document.getElementById('user-info');
     if (info) {
-        info.textContent = user.imie + ' ' + user.nazwisko + ' (' + user.rola + ')';
+        info.textContent = user.first_name + ' ' + user.last_name + ' (' + user.role + ')';
     }
 }
+
+/* ── ASCII T-Rex ── */
+var DINO_FRAME_A = [
+    '            __',
+    '           / _)',
+    '  _.----._/ /',
+    ' /         /',
+    '__/ (  | (  |',
+    '_.-\'|_|--|_|'
+].join('\n');
+
+var DINO_FRAME_B = [
+    '            __',
+    '           / _)',
+    '  _.----._/ /',
+    ' /         /',
+    '__/ (  | (  |',
+    '_.-\'|_|--__|'
+].join('\n');
+
+function initDino() {
+    var dino = document.createElement('div');
+    dino.className = 'dino-container';
+    dino.textContent = DINO_FRAME_A;
+    document.body.appendChild(dino);
+
+    // Szybka zmiana klatek (bieg)
+    var frame = 0;
+    setInterval(function () {
+        dino.textContent = (frame % 2 === 0) ? DINO_FRAME_A : DINO_FRAME_B;
+        frame++;
+    }, 200);
+
+    // Fikołek co 3 sekundy
+    setInterval(function () {
+        dino.classList.add('dino-flip');
+        setTimeout(function () {
+            dino.classList.remove('dino-flip');
+        }, 600);
+    }, 3000);
+}
+
+document.addEventListener('DOMContentLoaded', initDino);

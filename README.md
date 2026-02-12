@@ -1,12 +1,37 @@
 # ePracownik - Rejestr pracowników
 
-System do zarządzania rejestrem pracowników w firmie XYZ.
+System do zarządzania rejestrem pracowników
 
 ## Wymagania
 - PHP 8.1+
 - Composer
-- MariaDB / MySQL
 - Node.js (opcjonalnie, do serwera frontendu)
+
+## Zalecane rozszerzenia VS Code
+
+- **Laravel Extra Intellisense** (`amiralizadeh9480.laravel-extra-intellisense`) - autouzupełnianie route'ów, widoków, konfiguracji i innych elementów Laravela
+- **Intelephense** (`bmewburn.vscode-intelephense-client`) - analiza statyczna PHP
+
+Aby wygenerowac pliki pomocnicze IDE (eliminuje fałszywe błędy w edytorze):
+
+```bash
+cd backend
+php artisan ide-helper:generate
+php artisan ide-helper:models -N
+```
+
+## Funkcjonalności
+
+- Rejestracja i logowanie (login generowany automatycznie z imienia i nazwiska)
+- Aktywacja konta przez email (opcjonalnie)
+- Trzy role: pracownik, przełożony, administrator
+- Panel admina z CRUD użytkowników
+- Dodawanie godzin pracy przez przełożonego
+- Historia przepracowanych godzin
+- System komentarzy do dni pracy
+- Eksport raportów do CSV
+- Walidacja formularzy (regex)
+- Zabezpieczenie przed SQL Injection
 
 ## Instalacja
 
@@ -21,21 +46,14 @@ php artisan key:generate
 
 ### 2. Baza danych
 
-Utwórz bazę `epracownik` w MariaDB, potem:
+Projekt korzysta domyślnie z SQLite. Po konfiguracji:
 
 ```bash
 cd backend
-php artisan migrate
-php artisan db:seed
+php artisan migrate:fresh --seed
 ```
 
-### 3. Sanctum
-
-```bash
-php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
-```
-
-### 4. Uruchomienie
+### 3. Uruchomienie
 
 Backend:
 ```bash
@@ -51,21 +69,9 @@ Frontend:
 
 Po uruchomieniu seedera dostępne są konta:
 
-| Email | Hasło | Rola |
+| Login | Hasło | Rola |
 |-------|-------|------|
-| admin@epracownik.pl | admin123 | administrator |
-| jan.kowalski@epracownik.pl | pracownik123 | przelozony |
-| anna.nowak@epracownik.pl | pracownik123 | pracownik |
-
-## Funkcjonalności
-
-- Rejestracja i logowanie
-- Aktywacja konta przez email
-- Trzy role: pracownik, przełożony, administrator
-- Panel admina z CRUD użytkowników
-- Dodawanie godzin pracy przez przełożonego
-- Historia przepracowanych godzin
-- System komentarzy do dni pracy
-- Eksport raportów do CSV
-- Walidacja formularzy (regex)
-- Zabezpieczenie przed SQL Injection
+| admin.systemowy | student123 | administrator |
+| jan.kowalski | student123 | przelozony |
+| anna.nowak | student123 | pracownik |
+| piotr.wisniewski | student123 | pracownik |

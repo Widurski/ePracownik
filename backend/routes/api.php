@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/activate/{token}', [AuthController::class, 'activate']);
+Route::get('/activate-account/{token}', [AuthController::class, 'activateAccount']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
 

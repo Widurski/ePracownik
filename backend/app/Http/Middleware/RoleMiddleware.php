@@ -8,9 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
-    /**
-     * Sprawdzanie roli uzytkownika
-     */
     public function handle(Request $request, Closure $next, string $role): Response
     {
         $user = $request->user();
@@ -21,7 +18,7 @@ class RoleMiddleware
 
         $user->load('role');
 
-        if ($user->role->nazwa !== $role) {
+        if ($user->role->name !== $role) {
             return response()->json(['error' => 'Brak uprawnień'], 403);
         }
 

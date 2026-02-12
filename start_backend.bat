@@ -1,4 +1,4 @@
 @echo off
-cd %~dp0
-tools\php\php.exe backend\artisan serve
+cd /d "%~dp0"
+"%~dp0tools\php\php.exe" "%~dp0backend\artisan" serve
 pause

@@ -6,8 +6,17 @@ backend/storage/*.key
 backend/.env
 backend/.phpunit.result.cache
 frontend/node_modules/
+testy_playwright/node_modules/
 .vscode/
 .idea/
 *.log
 Thumbs.db
 .DS_Store
+
+# IDE helper stubs (auto-generated, per-developer)
+backend/_ide_helper.php
+backend/_ide_helper_models.php
+backend/.phpstorm.meta.php
+
+# Composer installer
+backend/composer-setup.php

@@ -17,10 +17,11 @@ async function ladujUzytkownikow() {
             const tr = document.createElement('tr');
             tr.innerHTML =
                 '<td>' + escapeHtml(u.id) + '</td>' +
-                '<td>' + escapeHtml(u.imie) + ' ' + escapeHtml(u.nazwisko) + '</td>' +
+                '<td>' + escapeHtml(u.first_name) + ' ' + escapeHtml(u.last_name) + '</td>' +
+                '<td>' + escapeHtml(u.login) + '</td>' +
                 '<td>' + escapeHtml(u.email) + '</td>' +
-                '<td>' + escapeHtml(u.telefon) + '</td>' +
-                '<td>' + escapeHtml(u.role ? u.role.nazwa : '') + '</td>' +
+                '<td>' + escapeHtml(u.phone_number) + '</td>' +
+                '<td>' + escapeHtml(u.role ? u.role.name : '') + '</td>' +
                 '<td>' + (u.is_active ? 'Tak' : 'Nie') + '</td>' +
                 '<td class="actions">' +
                 '<button class="btn btn-warning btn-sm" onclick="edytujUzytkownika(' + u.id + ')">Edytuj</button> ' +
@@ -35,16 +36,16 @@ async function ladujUzytkownikow() {
 
 async function dodajUzytkownika() {
     const dane = {
-        imie: document.getElementById('modal-imie').value.trim(),
-        nazwisko: document.getElementById('modal-nazwisko').value.trim(),
+        first_name: document.getElementById('modal-imie').value.trim(),
+        last_name: document.getElementById('modal-nazwisko').value.trim(),
         email: document.getElementById('modal-email').value.trim(),
-        telefon: document.getElementById('modal-telefon').value.trim(),
+        phone_number: document.getElementById('modal-telefon').value.trim(),
         password: document.getElementById('modal-password').value,
         role_id: parseInt(document.getElementById('modal-rola').value),
     };
 
-    if (!dane.imie || !dane.nazwisko || !dane.email || !dane.telefon || !dane.password) {
-        pokazKomunikat('Wypełnij wszystkie pola', 'error');
+    if (!dane.first_name || !dane.last_name || !dane.phone_number || !dane.password) {
+        pokazKomunikat('Wypełnij wszystkie wymagane pola', 'error');
         return;
     }
 
@@ -70,10 +71,10 @@ async function edytujUzytkownika(id) {
     try {
         const user = await apiCall('/admin/uzytkownicy/' + id);
         document.getElementById('modal-title').textContent = 'Edytuj użytkownika';
-        document.getElementById('modal-imie').value = user.imie || '';
-        document.getElementById('modal-nazwisko').value = user.nazwisko || '';
+        document.getElementById('modal-imie').value = user.first_name || '';
+        document.getElementById('modal-nazwisko').value = user.last_name || '';
         document.getElementById('modal-email').value = user.email || '';
-        document.getElementById('modal-telefon').value = user.telefon || '';
+        document.getElementById('modal-telefon').value = user.phone_number || '';
         document.getElementById('modal-password').value = '';
         document.getElementById('modal-rola').value = user.role_id || '1';
         document.getElementById('modal-submit').textContent = 'Zapisz';
@@ -86,10 +87,10 @@ async function edytujUzytkownika(id) {
 
 async function zapiszEdycje(id) {
     const dane = {
-        imie: document.getElementById('modal-imie').value.trim(),
-        nazwisko: document.getElementById('modal-nazwisko').value.trim(),
+        first_name: document.getElementById('modal-imie').value.trim(),
+        last_name: document.getElementById('modal-nazwisko').value.trim(),
         email: document.getElementById('modal-email').value.trim(),
-        telefon: document.getElementById('modal-telefon').value.trim(),
+        phone_number: document.getElementById('modal-telefon').value.trim(),
         role_id: parseInt(document.getElementById('modal-rola').value),
     };
 
@@ -218,7 +219,7 @@ async function ladujZespol() {
         data.forEach(function (p) {
             const opt = document.createElement('option');
             opt.value = p.id;
-            opt.textContent = p.imie + ' ' + p.nazwisko;
+            opt.textContent = p.first_name + ' ' + p.last_name;
             select.appendChild(opt);
         });
 
@@ -228,10 +229,10 @@ async function ladujZespol() {
             data.forEach(function (p) {
                 const tr = document.createElement('tr');
                 tr.innerHTML =
-                    '<td>' + escapeHtml(p.imie) + ' ' + escapeHtml(p.nazwisko) + '</td>' +
+                    '<td>' + escapeHtml(p.first_name) + ' ' + escapeHtml(p.last_name) + '</td>' +
                     '<td>' + escapeHtml(p.email) + '</td>' +
-                    '<td>' + escapeHtml(p.telefon) + '</td>' +
-                    '<td><button class="btn btn-primary btn-sm" onclick="pokazGodzinyPracownika(' + p.id + ', \'' + escapeHtml(p.imie) + ' ' + escapeHtml(p.nazwisko) + '\')">Historia</button></td>';
+                    '<td>' + escapeHtml(p.phone_number) + '</td>' +
+                    '<td><button class="btn btn-primary btn-sm" onclick="pokazGodzinyPracownika(' + p.id + ', \'' + escapeHtml(p.first_name) + ' ' + escapeHtml(p.last_name) + '\')">Historia</button></td>';
                 tbody.appendChild(tr);
             });
         }
@@ -288,13 +289,13 @@ async function pokazGodzinyPracownika(userId, nazwa) {
             let komentarzeHtml = '';
             if (g.komentarze && g.komentarze.length > 0) {
                 g.komentarze.forEach(function (k) {
-                    komentarzeHtml += '<div class="komentarz"><span class="autor">' + escapeHtml(k.autor.imie) + ' ' + escapeHtml(k.autor.nazwisko) + ':</span><div class="tresc">' + escapeHtml(k.tresc) + '</div></div>';
+                    komentarzeHtml += '<div class="komentarz"><span class="autor">' + escapeHtml(k.autor.first_name) + ' ' + escapeHtml(k.autor.last_name) + ':</span><div class="tresc">' + escapeHtml(k.tresc) + '</div></div>';
                 });
             }
             tr.innerHTML =
                 '<td>' + escapeHtml(g.data_pracy ? g.data_pracy.substring(0, 10) : '') + '</td>' +
                 '<td>' + escapeHtml(g.liczba_godzin) + '</td>' +
-                '<td>' + escapeHtml(g.dodajacy ? g.dodajacy.imie : '') + ' ' + escapeHtml(g.dodajacy ? g.dodajacy.nazwisko : '') + '</td>' +
+                '<td>' + escapeHtml(g.dodajacy ? g.dodajacy.first_name : '') + ' ' + escapeHtml(g.dodajacy ? g.dodajacy.last_name : '') + '</td>' +
                 '<td>' + komentarzeHtml +
                 '<button class="btn btn-sm btn-primary" style="margin-top:5px" onclick="dodajKomentarzPrzelozony(' + g.id + ')">Komentuj</button>' +
                 '</td>';
@@ -338,7 +339,7 @@ async function ladujStatystykiPrzelozony() {
         data.pracownicy.forEach(function (p) {
             const tr = document.createElement('tr');
             tr.innerHTML =
-                '<td>' + escapeHtml(p.imie) + ' ' + escapeHtml(p.nazwisko) + '</td>' +
+                '<td>' + escapeHtml(p.first_name) + ' ' + escapeHtml(p.last_name) + '</td>' +
                 '<td>' + escapeHtml(p.dni_pracy) + '</td>' +
                 '<td>' + escapeHtml(p.suma_godzin) + '</td>';
             tbody.appendChild(tr);
@@ -367,7 +368,7 @@ async function ladujPodsumowanie() {
                 tr.innerHTML =
                     '<td>' + escapeHtml(g.data_pracy ? g.data_pracy.substring(0, 10) : '') + '</td>' +
                     '<td>' + escapeHtml(g.liczba_godzin) + '</td>' +
-                    '<td>' + escapeHtml(g.dodajacy ? g.dodajacy.imie : '') + ' ' + escapeHtml(g.dodajacy ? g.dodajacy.nazwisko : '') + '</td>';
+                    '<td>' + escapeHtml(g.dodajacy ? g.dodajacy.first_name : '') + ' ' + escapeHtml(g.dodajacy ? g.dodajacy.last_name : '') + '</td>';
                 tbody.appendChild(tr);
             });
         }
@@ -393,7 +394,7 @@ async function ladujHistoriePracownik() {
             let komentarzeHtml = '';
             if (g.komentarze && g.komentarze.length > 0) {
                 g.komentarze.forEach(function (k) {
-                    komentarzeHtml += '<div class="komentarz"><span class="autor">' + escapeHtml(k.autor.imie) + ' ' + escapeHtml(k.autor.nazwisko) + ':</span><div class="tresc">' + escapeHtml(k.tresc) + '</div></div>';
+                    komentarzeHtml += '<div class="komentarz"><span class="autor">' + escapeHtml(k.autor.first_name) + ' ' + escapeHtml(k.autor.last_name) + ':</span><div class="tresc">' + escapeHtml(k.tresc) + '</div></div>';
                 });
             }
 
@@ -401,7 +402,7 @@ async function ladujHistoriePracownik() {
             tr.innerHTML =
                 '<td>' + escapeHtml(g.data_pracy ? g.data_pracy.substring(0, 10) : '') + '</td>' +
                 '<td>' + escapeHtml(g.liczba_godzin) + '</td>' +
-                '<td>' + escapeHtml(g.dodajacy ? g.dodajacy.imie : '') + ' ' + escapeHtml(g.dodajacy ? g.dodajacy.nazwisko : '') + '</td>' +
+                '<td>' + escapeHtml(g.dodajacy ? g.dodajacy.first_name : '') + ' ' + escapeHtml(g.dodajacy ? g.dodajacy.last_name : '') + '</td>' +
                 '<td>' + komentarzeHtml +
                 '<button class="btn btn-sm btn-primary" style="margin-top:5px" onclick="dodajKomentarzPracownik(' + g.id + ')">Komentuj</button>' +
                 '</td>';
