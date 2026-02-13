@@ -4,9 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * @method array validated($key = null, $default = null)
- */
+
 class RegisterRequest extends FormRequest
 {
     public function authorize(): bool

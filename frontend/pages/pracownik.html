@@ -21,7 +21,7 @@
     <div class="container">
         <div id="komunikaty"></div>
 
-        <!-- PODSUMOWANIE -->
+
         <div class="dashboard-cards">
             <div class="card">
                 <h3>Godziny w tym miesiącu</h3>
@@ -33,7 +33,7 @@
             </div>
         </div>
 
-        <!-- OSTATNIE WPISY -->
+
         <div class="section">
             <h2>Ostatnie wpisy</h2>
             <div class="table-wrap">
@@ -50,7 +50,7 @@
             </div>
         </div>
 
-        <!-- HISTORIA -->
+
         <div class="section">
             <h2>Historia godzin</h2>
             <div class="filters">
@@ -94,10 +94,27 @@
         </div>
     </div>
 
+
+    <div class="modal-overlay" id="modal-komentarz-overlay">
+        <div class="modal">
+            <button class="modal-close" onclick="zamknijModalKomentarz()" title="Zamknij">&times;</button>
+            <h2>Dodaj komentarz</h2>
+            <div class="form-group">
+                <label>Treść komentarza</label>
+                <textarea id="modal-komentarz-tresc" rows="4" placeholder="Opisz wykonane zadania..."></textarea>
+                <input type="hidden" id="modal-komentarz-id">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="zapiszKomentarzPracownik()">Zapisz</button>
+                <button class="btn btn-danger" onclick="zamknijModalKomentarz()">Anuluj</button>
+            </div>
+        </div>
+    </div>
+
     <script src="../js/api.js"></script>
     <script src="../js/app.js"></script>
     <script>
-        if (!sprawdzUprawnienia('pracownik')) { /* przekieruje */ }
+        if (!sprawdzUprawnienia('pracownik')) { }
         else {
             ustawHeader(getUser());
             ladujPodsumowanie();

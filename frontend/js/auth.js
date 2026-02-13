@@ -1,4 +1,4 @@
-/* global apiCall, pokazKomunikat */
+
 
 document.addEventListener('DOMContentLoaded', function () {
 

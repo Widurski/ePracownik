@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel przełożonego - ePracownik</title>
     <meta name="description" content="Panel przełożonego systemu ePracownik">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style.css?v=2">
 </head>
 
 <body>
@@ -21,7 +21,20 @@
     <div class="container">
         <div id="komunikaty"></div>
 
-        <!-- DODAWANIE GODZIN -->
+
+        <div class="section" id="kalendarz-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>Kalendarz pracy</h2>
+                <div class="calendar-nav">
+                    <button class="btn btn-sm" onclick="zmienMiesiac(-1)">&#9664;</button>
+                    <span id="kalendarz-miesiac-rok"
+                        style="font-family: var(--font-display); margin: 0 15px; font-size: 18px;"></span>
+                    <button class="btn btn-sm" onclick="zmienMiesiac(1)">&#9654;</button>
+                </div>
+            </div>
+            <div id="kalendarz-grid" class="calendar-grid"></div>
+        </div>
+
         <div class="section">
             <h2>Dodaj godziny pracy</h2>
             <form id="form-godziny" onsubmit="event.preventDefault(); dodajGodziny();">
@@ -45,7 +58,7 @@
             </form>
         </div>
 
-        <!-- ZESPÓŁ -->
+
         <div class="section">
             <h2>Zespół</h2>
             <div class="table-wrap">
@@ -63,7 +76,7 @@
             </div>
         </div>
 
-        <!-- HISTORIA PRACOWNIKA -->
+
         <div class="section hidden" id="historia-pracownika">
             <h2 id="historia-tytul">Historia godzin</h2>
             <p id="suma-godzin-przelozony" style="color: #2c3e50; font-weight: 600; margin-bottom: 12px;"></p>
@@ -82,7 +95,7 @@
             </div>
         </div>
 
-        <!-- STATYSTYKI -->
+
         <div class="section">
             <h2>Statystyki zespołu</h2>
             <div class="filters">
@@ -124,20 +137,34 @@
         </div>
     </div>
 
-    <script src="../js/api.js"></script>
-    <script src="../js/app.js"></script>
+    <script src="../js/api.js?v=2"></script>
+    <script src="../js/app.js?v=2"></script>
     <script>
-        if (!sprawdzUprawnienia('przelozony')) { /* przekieruje */ }
-        else {
-            ustawHeader(getUser());
+        try {
+            if (!sprawdzUprawnienia('przelozony')) { }
+            else {
+                ustawHeader(getUser());
 
-            const d = new Date();
-            document.getElementById('stat-rok').value = d.getFullYear();
-            document.getElementById('stat-miesiac').value = d.getMonth() + 1;
-            document.getElementById('data-pracy').max = d.toISOString().split('T')[0];
+                const d = new Date();
+                const rokEl = document.getElementById('stat-rok');
+                const miesiacEl = document.getElementById('stat-miesiac');
 
-            ladujZespol();
-            ladujStatystykiPrzelozony();
+                if (rokEl) rokEl.value = d.getFullYear();
+                if (miesiacEl) miesiacEl.value = d.getMonth() + 1;
+
+                ladujZespol();
+                ladujStatystykiPrzelozony();
+                console.log('Inicjalizacja kalendarza...');
+                if (typeof ladujKalendarz === 'function') {
+                    ladujKalendarz();
+                } else {
+                    console.error('Funkcja ladujKalendarz nie została znaleziona!');
+                    alert('Błąd: Nie znaleziono funkcji kalendarza. Spróbuj odświeżyć stronę (Ctrl+F5).');
+                }
+            }
+        } catch (err) {
+            console.error('Błąd inicjalizacji panelu:', err);
+            alert('Wystąpił błąd podczas ładowania panelu: ' + err.message);
         }
     </script>
 </body>

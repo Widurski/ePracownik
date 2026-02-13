@@ -1,10 +1,6 @@
-/* global apiCall, escapeHtml, pokazKomunikat, getToken, API_URL */
-/* exported ladujUzytkownikow, dodajUzytkownika, edytujUzytkownika, zapiszEdycje, usunUzytkownika,
-   ladujRaportyAdmin, eksportCSV, otworzModalDodaj, zamknijModal,
-   ladujZespol, dodajGodziny, pokazGodzinyPracownika, dodajKomentarzPrzelozony, ladujStatystykiPrzelozony,
-   ladujPodsumowanie, ladujHistoriePracownik, dodajKomentarzPracownik */
 
-// ======== ADMIN ========
+
+
 async function ladujUzytkownikow() {
     try {
         const data = await apiCall('/admin/uzytkownicy');
@@ -208,7 +204,7 @@ function zamknijModal() {
 }
 
 
-// ======== PRZEŁOŻONY ========
+
 async function ladujZespol() {
     try {
         const data = await apiCall('/przelozony/zespol');
@@ -350,7 +346,130 @@ async function ladujStatystykiPrzelozony() {
 }
 
 
-// ======== PRACOWNIK ========
+let kalendarzRok = new Date().getFullYear();
+let kalendarzMiesiac = new Date().getMonth() + 1;
+
+async function ladujKalendarz() {
+    const rok = kalendarzRok;
+    const miesiac = kalendarzMiesiac;
+
+    console.log('Ładowanie kalendarza dla:', rok, miesiac);
+    const nav = document.getElementById('kalendarz-miesiac-rok');
+    if (nav) {
+        nav.textContent = rozwinMiesiac(miesiac) + ' ' + rok;
+    } else {
+        console.error('Element nav kalendarza nie znaleziony!');
+    }
+
+    try {
+        const data = await apiCall('/przelozony/kalendarz?rok=' + rok + '&miesiac=' + miesiac);
+        console.log('Dane kalendarza otrzymane:', data);
+        if (data && data.godziny) {
+            renderKalendarz(data.godziny, rok, miesiac);
+        } else {
+            console.warn('Otrzymano puste dane kalendarza lub brak pola godziny');
+        }
+    } catch (err) {
+        console.error('Błąd w ladujKalendarz:', err);
+        pokazKomunikat('Błąd ładowania kalendarza: ' + (err.message || err), 'error');
+    }
+}
+
+function zmienMiesiac(delta) {
+    kalendarzMiesiac += delta;
+    if (kalendarzMiesiac > 12) {
+        kalendarzMiesiac = 1;
+        kalendarzRok++;
+    } else if (kalendarzMiesiac < 1) {
+        kalendarzMiesiac = 12;
+        kalendarzRok--;
+    }
+    ladujKalendarz();
+}
+
+function rozwinMiesiac(m) {
+    const nazwy = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
+    return nazwy[m - 1];
+}
+
+function renderKalendarz(godziny, rok, miesiac) {
+    const grid = document.getElementById('kalendarz-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+
+    const dniTygodnia = ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Ndz'];
+    dniTygodnia.forEach(function (d) {
+        const div = document.createElement('div');
+        div.className = 'calendar-header-day';
+        div.textContent = d;
+        grid.appendChild(div);
+    });
+
+    const firstDay = new Date(rok, miesiac - 1, 1);
+    const lastDay = new Date(rok, miesiac, 0);
+    const daysInMonth = lastDay.getDate();
+
+    // Day of week adjustment (0 is Sunday, make it 7. Subtract 1 to make Mon=0..Sun=6)
+    let startDayOfWeek = firstDay.getDay();
+    if (startDayOfWeek === 0) startDayOfWeek = 7;
+    startDayOfWeek -= 1;
+
+
+    for (let i = 0; i < startDayOfWeek; i++) {
+        const div = document.createElement('div');
+        div.className = 'calendar-day empty';
+        grid.appendChild(div);
+    }
+
+
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    for (let d = 1; d <= daysInMonth; d++) {
+        const dateStr = rok + '-' + String(miesiac).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+
+        const div = document.createElement('div');
+        div.className = 'calendar-day';
+        if (dateStr === todayStr) div.classList.add('calendar-today');
+
+        div.onclick = function () { otworzDodawanieGodzinData(dateStr); };
+
+        const num = document.createElement('div');
+        num.className = 'calendar-day-number';
+        num.textContent = d;
+        div.appendChild(num);
+
+        const content = document.createElement('div');
+        content.className = 'calendar-day-content';
+
+        const shifts = godziny.filter(function (g) { return g.data_pracy === dateStr; });
+        shifts.forEach(function (s) {
+            const shiftDiv = document.createElement('div');
+            shiftDiv.className = 'calendar-shift';
+            const name = s.pracownik ? ((s.pracownik.first_name[0] || '') + (s.pracownik.last_name[0] || '')) : '?';
+            shiftDiv.textContent = name + ' ' + parseFloat(s.liczba_godzin) + 'h';
+            shiftDiv.title = (s.pracownik ? s.pracownik.first_name + ' ' + s.pracownik.last_name : 'Archived') + ': ' + s.liczba_godzin + 'h';
+            content.appendChild(shiftDiv);
+        });
+
+        div.appendChild(content);
+        grid.appendChild(div);
+    }
+}
+
+function otworzDodawanieGodzinData(dateStr) {
+    const dataInput = document.getElementById('data-pracy');
+    if (dataInput) {
+        dataInput.value = dateStr;
+        document.getElementById('form-godziny').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('pracownik-select').focus();
+    }
+}
+
+
+
+
+
 async function ladujPodsumowanie() {
     try {
         const data = await apiCall('/pracownik/podsumowanie');
@@ -416,8 +535,27 @@ async function ladujHistoriePracownik() {
 }
 
 async function dodajKomentarzPracownik(godzinaId) {
-    const tresc = prompt('Wpisz komentarz:');
-    if (!tresc || tresc.trim() === '') return;
+    otworzModalKomentarz(godzinaId);
+}
+
+function otworzModalKomentarz(godzinaId) {
+    document.getElementById('modal-komentarz-id').value = godzinaId;
+    document.getElementById('modal-komentarz-tresc').value = '';
+    document.getElementById('modal-komentarz-overlay').classList.add('active');
+}
+
+function zamknijModalKomentarz() {
+    document.getElementById('modal-komentarz-overlay').classList.remove('active');
+}
+
+async function zapiszKomentarzPracownik() {
+    const godzinaId = document.getElementById('modal-komentarz-id').value;
+    const tresc = document.getElementById('modal-komentarz-tresc').value;
+
+    if (!tresc || tresc.trim() === '') {
+        pokazKomunikat('Wpisz treść komentarza', 'error');
+        return;
+    }
 
     try {
         await apiCall('/pracownik/komentarze', 'POST', {
@@ -425,6 +563,7 @@ async function dodajKomentarzPracownik(godzinaId) {
             tresc: tresc,
         });
         pokazKomunikat('Komentarz dodany', 'success');
+        zamknijModalKomentarz();
         ladujHistoriePracownik();
     } catch (err) {
         if (err.data && err.data.error) {

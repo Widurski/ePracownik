@@ -12,9 +12,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    /**
-     * Pobieranie listy uzytkownikow z filtrowaniem
-     */
+
     public function getUzytkownicy(Request $request): JsonResponse
     {
         $query = User::with('role');
@@ -40,9 +38,7 @@ class AdminController extends Controller
         return response()->json($uzytkownicy);
     }
 
-    /**
-     * Pobieranie pojedynczego uzytkownika
-     */
+
     public function getUzytkownik(int $id): JsonResponse
     {
         $user = User::with('role')->find($id);
@@ -54,9 +50,7 @@ class AdminController extends Controller
         return response()->json($user);
     }
 
-    /**
-     * Dodawanie nowego uzytkownika
-     */
+
     public function dodajUzytkownika(Request $request): JsonResponse
     {
         $request->validate([
@@ -95,9 +89,7 @@ class AdminController extends Controller
         ], 201);
     }
 
-    /**
-     * Edycja uzytkownika
-     */
+
     public function edytujUzytkownika(int $id, Request $request): JsonResponse
     {
         $user = User::find($id);
@@ -159,9 +151,7 @@ class AdminController extends Controller
         ]);
     }
 
-    /**
-     * Usuwanie uzytkownika
-     */
+
     public function usunUzytkownika(int $id, Request $request): JsonResponse
     {
         $user = User::find($id);
@@ -179,9 +169,7 @@ class AdminController extends Controller
         return response()->json(['message' => 'Użytkownik usunięty']);
     }
 
-    /**
-     * Raporty miesieczne
-     */
+
     public function getRaporty(Request $request): JsonResponse
     {
         $rok = $request->get('rok', date('Y'));
@@ -220,9 +208,7 @@ class AdminController extends Controller
         ]);
     }
 
-    /**
-     * Eksport danych do CSV
-     */
+
     public function eksportujCSV(Request $request): Response
     {
         $rok = $request->get('rok', date('Y'));
@@ -245,17 +231,13 @@ class AdminController extends Controller
         ]);
     }
 
-    /**
-     * Pobieranie listy rol
-     */
+
     public function getRole(): JsonResponse
     {
         return response()->json(Role::all());
     }
 
-    /**
-     * Generowanie loginu z imienia i nazwiska
-     */
+
     private function generateLogin(string $firstName, string $lastName): string
     {
         $base = mb_strtolower(

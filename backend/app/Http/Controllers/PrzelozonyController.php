@@ -11,9 +11,7 @@ use Illuminate\Http\Request;
 
 class PrzelozonyController extends Controller
 {
-    /**
-     * Dodawanie godzin pracy pracownikowi
-     */
+
     public function dodajGodziny(DodajGodzinyRequest $request): JsonResponse
     {
         $pracownik = User::with('role')->find($request->user_id);
@@ -45,9 +43,7 @@ class PrzelozonyController extends Controller
         ], 201);
     }
 
-    /**
-     * Pobieranie listy pracownikow (zespol)
-     */
+
     public function getZespol(): JsonResponse
     {
         $pracownicy = User::whereHas('role', function ($q) {
@@ -57,9 +53,7 @@ class PrzelozonyController extends Controller
         return response()->json($pracownicy);
     }
 
-    /**
-     * Pobieranie godzin pracy konkretnego pracownika
-     */
+
     public function getGodzinyPracownika(int $userId, Request $request): JsonResponse
     {
         $pracownik = User::find($userId);
@@ -86,9 +80,7 @@ class PrzelozonyController extends Controller
         ]);
     }
 
-    /**
-     * Dodawanie komentarza do wpisu godzin
-     */
+
     public function dodajKomentarz(Request $request): JsonResponse
     {
         $request->validate([
@@ -110,9 +102,7 @@ class PrzelozonyController extends Controller
         ], 201);
     }
 
-    /**
-     * Pobieranie statystyk zespolu
-     */
+
     public function getStatystyki(Request $request): JsonResponse
     {
         $rok = $request->get('rok', date('Y'));
@@ -144,6 +134,24 @@ class PrzelozonyController extends Controller
             'pracownicy' => $pracownicy,
             'rok' => $rok,
             'miesiac' => $miesiac,
+        ]);
+    }
+
+    public function getKalendarz(Request $request): JsonResponse
+    {
+        $rok = $request->get('rok', date('Y'));
+        $miesiac = $request->get('miesiac', date('m'));
+
+        $godziny = GodzinaPracy::with(['pracownik'])
+            ->whereYear('data_pracy', $rok)
+            ->whereMonth('data_pracy', $miesiac)
+            ->orderBy('data_pracy')
+            ->get();
+
+        return response()->json([
+            'rok' => $rok,
+            'miesiac' => $miesiac,
+            'godziny' => $godziny,
         ]);
     }
 }

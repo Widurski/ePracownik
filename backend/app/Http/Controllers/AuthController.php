@@ -15,9 +15,7 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    /**
-     * Rejestracja nowego uzytkownika
-     */
+
     public function register(RegisterRequest $request): JsonResponse
     {
         $validated = $request->validated();
@@ -53,9 +51,7 @@ class AuthController extends Controller
         ], 201);
     }
 
-    /**
-     * Logowanie uzytkownika
-     */
+
     public function login(LoginRequest $request): JsonResponse
     {
         $validated = $request->validated();
@@ -90,12 +86,10 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Wylogowanie uzytkownika
-     */
+
     public function logout(Request $request): JsonResponse
     {
-        /** @var User $user */
+
         $user = $request->user();
         if ($user) {
             $user->currentAccessToken()->delete();
@@ -104,12 +98,10 @@ class AuthController extends Controller
         return new JsonResponse(['message' => 'Wylogowano']);
     }
 
-    /**
-     * Pobieranie danych zalogowanego uzytkownika
-     */
+
     public function me(Request $request): JsonResponse
     {
-        /** @var User $user */
+
         $user = $request->user();
         $user->load('role');
 
@@ -124,9 +116,7 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Aktywacja konta
-     */
+
     public function activateAccount(string $token): JsonResponse
     {
         $user = User::where('activation_token', $token)->first();
@@ -143,9 +133,7 @@ class AuthController extends Controller
         return new JsonResponse(['message' => 'Konto zostało aktywowane. Możesz się zalogować.']);
     }
 
-    /**
-     * Generowanie loginu z imienia i nazwiska
-     */
+
     private function generateLogin(string $firstName, string $lastName): string
     {
         $base = mb_strtolower(

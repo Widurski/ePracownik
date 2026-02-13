@@ -1,4 +1,4 @@
-/* exported API_URL, escapeHtml, apiCall, getUser, getToken, isLoggedIn, wyloguj, pokazKomunikat, sprawdzUprawnienia, ustawHeader */
+
 
 const API_URL = 'http://localhost:8000/api';
 
@@ -111,7 +111,7 @@ function ustawHeader(user) {
     }
 }
 
-/* ── ASCII T-Rex ── */
+
 var DINO_FRAME_A = [
     '            __',
     '           / _)',
@@ -136,14 +136,14 @@ function initDino() {
     dino.textContent = DINO_FRAME_A;
     document.body.appendChild(dino);
 
-    // Szybka zmiana klatek (bieg)
+
     var frame = 0;
     setInterval(function () {
         dino.textContent = (frame % 2 === 0) ? DINO_FRAME_A : DINO_FRAME_B;
         frame++;
     }, 200);
 
-    // Fikołek co 3 sekundy
+
     setInterval(function () {
         dino.classList.add('dino-flip');
         setTimeout(function () {

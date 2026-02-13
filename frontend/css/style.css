@@ -11,7 +11,7 @@
     --transition: 0.1s steps(5);
 }
 
-/* ── RESET ── */
+
 *,
 *::before,
 *::after {
@@ -28,7 +28,7 @@ body {
     min-height: 100vh;
     line-height: 1.5;
     overflow-x: hidden;
-    /* CRT Scanline */
+
     background-image: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.5) 50%);
     background-size: 100% 4px;
 }
@@ -44,7 +44,7 @@ a:hover {
     color: #000;
 }
 
-/* ── HEADER ── */
+
 .header {
     background: #000;
     border-bottom: var(--border-width) solid var(--color-main);
@@ -92,14 +92,14 @@ a:hover {
     color: #000;
 }
 
-/* ── LAYOUT ── */
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 40px 20px;
 }
 
-/* ── FORMS & INPUTS ── */
+
 .auth-container {
     display: flex;
     justify-content: center;
@@ -163,7 +163,7 @@ textarea:focus {
     border-width: 2px;
 }
 
-/* ── BUTTONS (WIREFRAME ONLY) ── */
+
 .btn {
     display: inline-block;
     padding: 12px 24px;
@@ -206,7 +206,7 @@ textarea:focus {
     border-width: 1px;
 }
 
-/* ── MESSAGES ── */
+
 .message {
     padding: 15px;
     border: 1px solid var(--color-main);
@@ -241,7 +241,7 @@ textarea:focus {
     }
 }
 
-/* ── TABLES ── */
+
 .table-wrap {
     overflow-x: auto;
     border: 1px solid var(--color-main);
@@ -273,7 +273,7 @@ table tr:hover td {
     background: var(--color-main-dim);
 }
 
-/* ── CARDS ── */
+
 .dashboard-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -305,7 +305,7 @@ table tr:hover td {
     font-weight: 700;
 }
 
-/* ── SECTIONS ── */
+
 .section {
     border: 1px solid var(--color-main);
     padding: 30px;
@@ -346,7 +346,7 @@ table tr:hover td {
     padding-left: 15px;
 }
 
-/* ── FILTERS ── */
+
 .filters {
     display: flex;
     gap: 15px;
@@ -355,7 +355,7 @@ table tr:hover td {
     align-items: flex-end;
 }
 
-/* ── MODAL ── */
+
 .modal-overlay {
     background: rgba(0, 0, 0, 0.9);
     display: none;
@@ -416,7 +416,7 @@ table tr:hover td {
     margin-top: 30px;
 }
 
-/* ── COMMENTS ── */
+
 .komentarz {
     border: 1px solid var(--color-main);
     padding: 10px;
@@ -432,12 +432,12 @@ table tr:hover td {
     border-bottom: 1px solid var(--color-main-dim);
 }
 
-/* ── UTILS ── */
+
 .hidden {
     display: none !important;
 }
 
-/* ── DINOSAUR ── */
+
 .dino-container {
     position: fixed;
     bottom: 10px;
@@ -467,7 +467,7 @@ table tr:hover td {
     }
 }
 
-/* ── RESPONSIVE ── */
+
 @media (max-width: 768px) {
     .header {
         flex-direction: column;
@@ -479,4 +479,88 @@ table tr:hover td {
         flex-direction: column;
         align-items: stretch;
     }
+}
+
+
+
+#kalendarz-section {
+    max-width: 400px;
+    margin: 0 auto 30px auto;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    border: 1px solid var(--color-main);
+    background: var(--color-main);
+    aspect-ratio: 7/5;
+
+}
+
+.calendar-header-day {
+    background: #000;
+    color: var(--color-main);
+    padding: 10px 5px;
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-day {
+    background: #000;
+
+    padding: 5px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.calendar-day:hover {
+    background: rgba(255, 69, 0, 0.15);
+}
+
+.calendar-day-number {
+    align-self: flex-end;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.calendar-day-content {
+    flex: 1;
+    font-size: 10px;
+    overflow-y: hidden;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+
+.calendar-shift {
+    background: var(--color-main-dim);
+    padding: 1px 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: var(--font-body);
+    font-size: 9px;
+    line-height: 1.1;
+}
+
+.calendar-day.empty {
+    background: #050505;
+    cursor: default;
+}
+
+.calendar-today {
+    box-shadow: inset 0 0 0 1px var(--color-main);
 }

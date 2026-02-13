@@ -9,9 +9,7 @@ use Illuminate\Http\Request;
 
 class PracownikController extends Controller
 {
-    /**
-     * Pobieranie godzin pracy zalogowanego pracownika
-     */
+
     public function getMojeGodziny(Request $request): JsonResponse
     {
         $godziny = GodzinaPracy::where('user_id', $request->user()->id)
@@ -22,9 +20,7 @@ class PracownikController extends Controller
         return response()->json($godziny);
     }
 
-    /**
-     * Pobieranie godzin pracy w danym miesiacu
-     */
+
     public function getGodzinyMiesiac(int $rok, int $miesiac, Request $request): JsonResponse
     {
         $godziny = GodzinaPracy::where('user_id', $request->user()->id)
@@ -44,9 +40,7 @@ class PracownikController extends Controller
         ]);
     }
 
-    /**
-     * Podsumowanie godzin w biezacym miesiacu
-     */
+
     public function getPodsumowanie(Request $request): JsonResponse
     {
         $userId = $request->user()->id;
@@ -76,9 +70,7 @@ class PracownikController extends Controller
         ]);
     }
 
-    /**
-     * Dodawanie komentarza do wpisu godzin
-     */
+
     public function dodajKomentarz(Request $request): JsonResponse
     {
         $request->validate([
